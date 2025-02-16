@@ -1,0 +1,7 @@
+# .gitignore
+.env
+__pycache__
+.ipynb_checkpoints
+contracts/target
+*.wasm
+environment.yml
