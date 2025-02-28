@@ -17,20 +17,30 @@ class SecretAIWriter:
         """Initialize the Secret AI Writer with AI service and blockchain integration"""
         try:
             # Try to set up Ollama
-            ollama_base_url = config("OLLAMA_BASE_URL", default="http://localhost:11434")
-            ollama_model = config("OLLAMA_MODEL", default="llama2")
+            self.ollama_base_url = config("OLLAMA_BASE_URL", default="http://localhost:11434")
             
-            # Initialize Ollama
+            # Use a smaller, faster model
+            self.ollama_model = config("OLLAMA_MODEL", default="mistral:7b-instruct")
+            
+            # Get temperature setting
+            self.temperature = config("TEMPERATURE", default="0.7", cast=float)
+            
+            # Get max tokens setting
+            self.max_tokens = config("MAX_TOKENS", default="1024", cast=int)  # Limit response length for faster generation
+            
+            # Initialize Ollama with optimized settings
             self.llm = ChatOllama(
-                base_url=ollama_base_url,
-                model=ollama_model,
-                temperature=0.7,
+                base_url=self.ollama_base_url,
+                model=self.ollama_model,
+                temperature=self.temperature,
+                timeout=120,  # 2 minute timeout
+                max_tokens=self.max_tokens
             )
             
             # Initialize blockchain connection
             self.metadata_handler = PrivateMetadata()
             
-            logger.info(f"SecretAIWriter initialized successfully with Ollama model: {ollama_model}")
+            logger.info(f"SecretAIWriter initialized successfully with Ollama model: {self.ollama_model}")
             
         except Exception as e:
             logger.error(f"Failed to initialize SecretAIWriter: {str(e)}")
@@ -55,7 +65,8 @@ class SecretAIWriter:
             if not system_instruction:
                 system_instruction = """You are a helpful AI writing assistant. 
                 Provide creative, well-structured content while maintaining the user's privacy.
-                Focus on clarity, engagement, and proper grammar."""
+                Focus on clarity, engagement, and proper grammar.
+                Be concise and aim to respond in 300-500 words unless specifically asked for more."""
             
             # Create messages for the LLM
             messages = [
@@ -78,7 +89,7 @@ class SecretAIWriter:
                 "response_length": len(generated_content),
                 "processing_time": round(end_time - start_time, 2),
                 "estimated_tokens": token_estimate,
-                "model": config("OLLAMA_MODEL", default="llama2"),
+                "model": config("OLLAMA_MODEL", default="mistral:7b-instruct"),
                 "content_type": "text"
             }
             
@@ -128,7 +139,8 @@ class SecretAIWriter:
         )
         
         system_instruction = f"""You are a writing enhancement specialist focused on {enhancement_type}.
-        Provide the improved version without explaining your changes unless asked."""
+        Provide the improved version without explaining your changes unless asked.
+        Keep your response concise. Just return the enhanced text."""
         
         return self.generate_content(
             prompt=f"{prompt}\n\n{draft_text}",

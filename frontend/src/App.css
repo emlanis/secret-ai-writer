@@ -1,0 +1,192 @@
+/* App.css */
+:root {
+  --secret-purple: #9986F0;
+  --secret-blue: #4E67E5;
+  --secret-dark: #1D1D41;
+  --secret-gray: #F5F5F7;
+}
+
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background-color: var(--secret-gray);
+  margin: 0;
+  padding: 0;
+}
+
+.header {
+  background-color: var(--secret-dark);
+  color: white;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.main-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.button {
+  background-color: var(--secret-purple);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.1s;
+}
+
+.button:hover {
+  background-color: var(--secret-blue);
+}
+
+.button:active {
+  transform: translateY(1px);
+}
+
+.card {
+  background-color: white;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s;
+}
+
+.card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.editor-area {
+  min-height: 200px;
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+  transition: border-color 0.3s;
+  box-sizing: border-box;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.editor-area:focus {
+  outline: none;
+  border-color: var(--secret-purple);
+  box-shadow: 0 0 0 2px rgba(153, 134, 240, 0.2);
+}
+
+.two-column {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .two-column {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Loading spinner animation */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-spinner {
+  display: inline-block;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 0.2rem solid rgba(156, 163, 175, 0.3);
+  border-radius: 50%;
+  border-top-color: var(--secret-purple);
+  animation: spin 1s linear infinite;
+}
+
+/* Tab styles */
+.tab-button {
+  background: none;
+  border: none;
+  padding: 0.75rem 0;
+  font-family: inherit;
+  cursor: pointer;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.tab-active {
+  color: var(--secret-purple);
+  border-bottom: 2px solid var(--secret-purple);
+}
+
+.tab-inactive {
+  color: #6B7280;
+  border-bottom: 2px solid transparent;
+}
+
+/* Success notification */
+.success-notification {
+  background-color: #D1FAE5;
+  color: #065F46;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  margin-top: 0.5rem;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Error notification */
+.error-notification {
+  background-color: #FEE2E2;
+  color: #B91C1C;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  margin-top: 0.5rem;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Button loading state */
+.button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Stored draft card */
+.draft-card {
+  border: 1px solid #E5E7EB;
+  border-radius: 0.25rem;
+  padding: 0.75rem;
+  transition: border-color 0.3s;
+}
+
+.draft-card:hover {
+  border-color: var(--secret-purple);
+}
+
+/* Improve performance with GPU acceleration */
+.header, .card, .button {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+/* Content placeholders for loading states */
+.placeholder {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+  border-radius: 0.25rem;
+  height: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+@keyframes loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
